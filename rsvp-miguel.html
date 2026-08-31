@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CumpleMiguel 🤘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0010;
+      --purple: #2a0045;
+      --fucsia: #e8186d;
+      --yellow: #f5c400;
+      --white: #f0eade;
+      --gray: #8a7a9a;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 20%, #1a003a 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, #1a003a 0%, transparent 60%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      color: var(--white);
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: 'Bangers', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--yellow);
+      border: 1px solid var(--yellow);
+      padding: 0.25rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+
+    .greeting {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+    }
+
+    .name {
+      font-family: 'Bangers', sans-serif;
+      font-size: clamp(3rem, 12vw, 5rem);
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: var(--fucsia);
+      margin: 1.2rem auto;
+    }
+
+    .question {
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .question strong {
+      color: var(--fucsia);
+      font-weight: 600;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .option {
+      background: transparent;
+      border: 1.5px solid #3a1a5a;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      transition: border-color 0.15s, background 0.15s;
+      line-height: 1.4;
+    }
+
+    .option:hover {
+      border-color: var(--fucsia);
+      background: rgba(232, 24, 109, 0.06);
+    }
+
+    .option.selected {
+      border-color: var(--fucsia);
+      background: rgba(232, 24, 109, 0.12);
+    }
+
+    .option-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      width: 1.8rem;
+      text-align: center;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--fucsia);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 1rem;
+      font-family: 'Bangers', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:hover { background: #c9145e; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { background: #3a1a5a; color: var(--gray); cursor: not-allowed; }
+
+    /* Confirmation screen */
+    .confirm-screen {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .confirm-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .confirm-title {
+      font-family: 'Bangers', sans-serif;
+      font-size: 2.2rem;
+      color: var(--yellow);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .confirm-msg {
+      font-size: 1rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .confirm-msg strong {
+      color: var(--white);
+    }
+
+    .error-msg {
+      color: var(--fucsia);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .footer {
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      color: #4a3a5a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- RSVP screen -->
+  <div id="rsvp-screen">
+    <div class="tag">Virgo ♍ · Cumpleaños #38</div>
+
+    <p class="greeting">Hey,</p>
+    <div class="name" id="nombre-display">Invitado</div>
+    <div class="divider"></div>
+
+    <p class="question">
+      Te invito a celebrar el <strong>Cumple de Miguel</strong>.<br/>
+      ¿A qué parte del plan te apuntas?
+    </p>
+
+    <div class="options" id="options">
+      <button class="option" data-value="Solo apto" onclick="select(this)">
+        <span class="option-icon">🏠</span>
+        <span>Solo voy a ir al apto</span>
+      </button>
+      <button class="option" data-value="Solo Theatron" onclick="select(this)">
+        <span class="option-icon">🎶</span>
+        <span>Solo voy a Theatron</span>
+      </button>
+      <button class="option" data-value="Ambas" onclick="select(this)">
+        <span class="option-icon">🤘</span>
+        <span>Voy a ir a las dos: Apartamento y Theatron</span>
+      </button>
+      <button class="option" data-value="Ninguna" onclick="select(this)">
+        <span class="option-icon">😢</span>
+        <span>No puedo ir a ninguna</span>
+      </button>
+    </div>
+
+    <button class="btn" id="btn-confirmar" disabled onclick="confirmar()">Confirmar asistencia</button>
+    <p class="error-msg" id="error-msg">Algo salió mal. Intenta de nuevo.</p>
+
+    <p class="footer">Cumple de Miguel 2026 🖤</p>
+  </div>
+
+  <!-- Confirmation screen -->
+  <div class="confirm-screen" id="confirm-screen">
+    <div class="confirm-icon" id="confirm-icon">🤘</div>
+    <div class="confirm-title" id="confirm-title">¡Listo!</div>
+    <p class="confirm-msg" id="confirm-msg"></p>
+    <p class="footer" style="margin-top:2rem">CumpleMiguel 2025 🖤</p>
+  </div>
+
+</div>
+
+<script>
+  // ── Config ──────────────────────────────────────────────
+  const APPS_SCRIPT_URL = "PEGA_TU_URL_AQUÍ"; // lo conectamos después
+
+  // ── Leer nombre del URL ──────────────────────────────────
+  const params  = new URLSearchParams(window.location.search);
+  const nombre  = params.get("invitado") || "Invitado";
+  document.getElementById("nombre-display").textContent = nombre;
+
+  // ── Selección de opción ──────────────────────────────────
+  let seleccion = null;
+
+  function select(btn) {
+    document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+    btn.classList.add("selected");
+    seleccion = btn.dataset.value;
+    document.getElementById("btn-confirmar").disabled = false;
+    document.getElementById("error-msg").style.display = "none";
+  }
+
+  // ── Confirmar ────────────────────────────────────────────
+  async function confirmar() {
+    if (!seleccion) return;
+
+    const btn = document.getElementById("btn-confirmar");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre,
+          asistencia: seleccion,
+          fecha: new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })
+        })
+      });
+
+      mostrarConfirmacion();
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = "Confirmar asistencia";
+      document.getElementById("error-msg").style.display = "block";
+    }
+  }
+
+  // ── Pantalla de confirmación ─────────────────────────────
+  function mostrarConfirmacion() {
+    document.getElementById("rsvp-screen").style.display = "none";
+    const cs = document.getElementById("confirm-screen");
+    cs.style.display = "block";
+
+    const mensajes = {
+      "Solo apto":     { icon: "🏠", title: "¡Ahí estaremos!", msg: `<strong>${nombre}</strong>, te esperamos en el apto. ¡Va a ser un rato increíble!` },
+      "Solo Theatron": { icon: "🎶", title: "¡Nos vemos en Theatron!", msg: `<strong>${nombre}</strong>, la noche promete. ¡Prepárate!` },
+      "Ambas":         { icon: "🤘", title: "¡Todo el plan!", msg: `<strong>${nombre}</strong>, de principio a fin. ¡Eso es lo que se necesita!` },
+      "Ninguna":       { icon: "💔", title: "¡Te vamos a extrañar!", msg: `<strong>${nombre}</strong>, gracias por avisarnos. ¡Celebramos contigo otro día!` }
+    };
+
+    const m = mensajes[seleccion];
+    document.getElementById("confirm-icon").textContent  = m.icon;
+    document.getElementById("confirm-title").textContent = m.title;
+    document.getElementById("confirm-msg").innerHTML     = m.msg;
+  }
+</script>
+
+</body>
+</html>
